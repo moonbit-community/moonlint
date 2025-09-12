@@ -1,1 +1,6 @@
-{}
+{
+    "import": [
+      "moonbitlang/parser/syntax",
+      "moonbitlang/parser/basic"
+    ]
+}

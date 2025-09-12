@@ -2,7 +2,9 @@
   "name": "myfreess/moonlint",
   "version": "0.1.0",
   "deps": {
-    "moonbitlang/parser": "0.1.5"
+    "moonbitlang/parser": "0.1.5",
+    "moonbitlang/x": "0.4.34",
+    "Yoorkin/ArgParser": "0.1.11"
   },
   "readme": "README.md",
   "repository": "",

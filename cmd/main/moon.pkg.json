@@ -1,4 +1,12 @@
 {
   "is-main": true,
-  "import": ["myfreess/moonlint"]
+  "import": [
+    "myfreess/moonlint",
+    "moonbitlang/parser",
+    "moonbitlang/parser/basic",
+    "moonbitlang/parser/syntax",
+    "moonbitlang/x/fs",
+    "Yoorkin/ArgParser",
+    "moonbitlang/x/sys"
+  ]
 }
