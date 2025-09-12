@@ -46,13 +46,29 @@ fn main {
     #| usage: 
     #|   moonlint.exe <file1> <file2> ...
   @ArgParser.parse(spec, filename => filenames.push(filename), usage, argv)
+  if filenames.length() == 0 {
+    let base = get_src_location(load_module_info()) catch {
+      err => {
+        println("failed to load module info: \{err}")
+        panic()
+      }
+    }
+    let mbt_set = get_mbt_path_set_from_base(base) catch {
+      err => {
+        println("failed when finding source files: \{err}")
+        panic()
+      }
+    }
+    for filename in mbt_set {
+      filenames.push(filename)
+    }
+  }
   for filename in filenames {
-    let warnings = match (try? lint_file(filename)) {
-      Err(err) => {
+    let warnings = lint_file(filename) catch {
+      err => {
         println(err)
         panic()
       }
-      Ok(warning) => warning
     }
     for warning in warnings {
       let msg = message_for_warning(warning)
