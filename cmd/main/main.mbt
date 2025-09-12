@@ -23,14 +23,15 @@ fn message_for_warning(warning : @moonlint.Warning) -> String {
     MatchTryQuestion(loc) => {
       let msg =
         $| found anti-pattern at \{loc}:
-        #|     match try? expr {
-        #|       Ok(...) => branch_ok
-        #|       Err(err) => branch_err
+        #|     match (try? expr) {
+        #|       Ok(value) => <branch_ok>
+        #|       Err(err) => <branch_err>
         #|     }
         #| rewrite it to:
-        #|     branch_ok catch {
-        #|       err => branch_err
+        #|     let value = expr catch {
+        #|       err => <branch_err>
         #|     }
+        #|     <branch_ok>
       return msg
     }
   }
