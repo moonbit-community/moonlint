@@ -1,7 +1,7 @@
 ///|
 pub enum Warning {
   MatchTryQuestion(Location)
-}
+} derive(Show)
 
 ///|
 priv struct LintEnv(Array[Warning])
