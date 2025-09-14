@@ -1,11 +1,13 @@
 ///|
 fn read_mbt_file_to_impls(filename : String) -> @syntax.Impls raise {
   let source = @fs.read_file_to_string(filename)
-  let (impls, reports) = @parser.parse_string(source, name=filename)
+  let (impls, reports) = @parser.parse_string(
+    source,
+    name=filename,
+    parser=MoonYacc,
+  )
   if reports.length() > 0 {
-    for report in reports {
-      fail(report.to_string())
-    }
+    fail(reports[0].to_string())
   }
   // println(impls.to_json().stringify(indent=2))
   return impls
