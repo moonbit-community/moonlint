@@ -9,10 +9,22 @@ priv struct LintEnv(Array[Warning])
 ///|
 /// curresponding anti-pattern:
 /// 
-///   match (try? expr) {
-///     Ok(_) => ...
-///     Err(_) => ...
-///   }
+/// ```pesudo mbt code
+/// match (try? expr) {
+///   Ok(value) => <branch_ok>
+///   Err(err) => <branch_err>
+/// }
+/// ```
+/// 
+/// should be replaced with:
+/// 
+/// ```pesudo mbt code
+/// let value = expr catch {
+///   err => <branch_err>
+/// }
+/// <branch_ok>
+/// ```
+/// 
 impl @syntax.IterVisitor for LintEnv with visit_Expr_Match(
   env,
   expr~,
