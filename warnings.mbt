@@ -1,6 +1,7 @@
 ///|
 pub enum Warning {
   MatchTryQuestion(Location)
+  StringLiteralMultiplyNumber(Location)
 } derive(Show)
 
 ///|
@@ -50,6 +51,47 @@ impl @syntax.IterVisitor for LintEnv with visit_Expr_Match(
     Some(using_) => env.base().visit_Label(using_)
     None => ()
   }
+}
+
+///|
+/// curresponding anti-pattern:
+/// 
+/// ```pesudo mbt code
+/// "<string literal>" * n
+/// ```
+/// 
+/// should be replaced with:
+/// 
+/// ```pesudo mbt code
+/// "<string literal>".repeat(n)
+/// ```
+/// 
+impl @syntax.IterVisitor for LintEnv with visit_Expr_Infix(
+  env,
+  op~,
+  lhs~,
+  rhs~,
+  loc~,
+) {
+  fn found_string_literal_multiply_number(
+    op : @syntax.Var,
+    lhs : @syntax.Expr,
+    rhs : @syntax.Expr,
+  ) -> Bool {
+    op.name is Ident(name~) &&
+    name == "*" &&
+    lhs is Constant(c~, ..) &&
+    c is String(_) &&
+    rhs is Constant(c~, ..) &&
+    c is Int(_)
+  }
+
+  if found_string_literal_multiply_number(op, lhs, rhs) {
+    env.0.push(Warning::StringLiteralMultiplyNumber(loc))
+  }
+  env.base().visit_Var(op)
+  env.base().visit_Expr(lhs)
+  env.base().visit_Expr(rhs)
 }
 
 ///|

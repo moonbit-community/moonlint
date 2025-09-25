@@ -20,21 +20,41 @@ fn lint_file(filename : String) -> Array[@moonlint.Warning] raise {
 }
 
 ///|
+fn report_antipattern(
+  loc~ : @basic.Location,
+  antipattern~ : String,
+  suggestion~ : String,
+) -> String {
+  let msg =
+    $| found anti-pattern at \{loc}:
+    $| \{antipattern}
+    #| rewrite it to:
+    $| \{suggestion}
+  return msg
+}
+
+///|
 fn message_for_warning(warning : @moonlint.Warning) -> String {
   match warning {
     MatchTryQuestion(loc) => {
-      let msg =
-        $| found anti-pattern at \{loc}:
+      let antipattern =
         #|     match (try? expr) {
         #|       Ok(value) => <branch_ok>
         #|       Err(err) => <branch_err>
         #|     }
-        #| rewrite it to:
+      let suggestion =
         #|     let value = expr catch {
         #|       err => <branch_err>
         #|     }
         #|     <branch_ok>
-      return msg
+      return report_antipattern(loc~, antipattern~, suggestion~)
+    }
+    StringLiteralMultiplyNumber(loc) => {
+      let antipattern =
+        #|     "<string literal>" * n
+      let suggestion =
+        #|     "<string literal>".repeat(n)
+      return report_antipattern(loc~, antipattern~, suggestion~)
     }
   }
 }
