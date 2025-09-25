@@ -7,6 +7,12 @@ pub enum Warning {
 priv struct LintEnv(Array[Warning])
 
 ///|
+/// curresponding anti-pattern:
+/// 
+///   match (try? expr) {
+///     Ok(_) => ...
+///     Err(_) => ...
+///   }
 impl @syntax.IterVisitor for LintEnv with visit_Expr_Match(
   env,
   expr~,
