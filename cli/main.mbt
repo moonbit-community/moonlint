@@ -24,12 +24,20 @@ fn report_antipattern(
   loc~ : @basic.Location,
   antipattern~ : String,
   suggestion~ : String,
+  replace_condition? : String,
 ) -> String {
+  let suggestion = if replace_condition is Some(replace_condition) {
+    "If \{replace_condition}, \{suggestion}"
+  } else {
+    "\{suggestion}"
+  }
   let msg =
-    $| found anti-pattern at \{loc}:
+    $| Found anti-pattern at \{loc}:
+    $|
     $| \{antipattern}
-    $| rewrite it to:
-    $| \{suggestion}
+    $|
+    $| Suggestion: \{suggestion}
+    $|
   return msg
 }
 
@@ -43,6 +51,8 @@ fn message_for_warning(warning : @moonlint.Warning) -> String {
         #|       Err(err) => <branch_err>
         #|     }
       let suggestion =
+        #|rewrite to:
+        #|
         #|     let value = expr catch {
         #|       err => <branch_err>
         #|     }
@@ -53,8 +63,16 @@ fn message_for_warning(warning : @moonlint.Warning) -> String {
       let antipattern =
         #|     "<string literal>" * n
       let suggestion =
+        #|rewrite to:
+        #|
         #|     "<string literal>".repeat(n)
-      return report_antipattern(loc~, antipattern~, suggestion~)
+      let replace_condition = "n was an integer (or integer variable)"
+      return report_antipattern(
+        loc~,
+        antipattern~,
+        suggestion~,
+        replace_condition~,
+      )
     }
   }
 }
@@ -85,6 +103,8 @@ fn main {
       filenames.push(filename)
     }
   }
+  // make output more human-friendly
+  println(" ")
   for filename in filenames {
     let warnings = lint_file(filename) catch {
       err => {
