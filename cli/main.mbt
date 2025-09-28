@@ -66,7 +66,7 @@ fn message_for_warning(warning : @moonlint.Warning) -> String {
         #|rewrite to:
         #|
         #|     "<string literal>".repeat(n)
-      let replace_condition = "n was an integer (or integer variable)"
+      let replace_condition = "n was an integer expression"
       return report_antipattern(
         loc~,
         antipattern~,

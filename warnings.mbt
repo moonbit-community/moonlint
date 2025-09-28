@@ -53,7 +53,7 @@ impl @syntax.IterVisitor for LintEnv with visit_Expr(env, expr) {
     /// "<string literal>" * n
     /// ```
     /// 
-    /// if n was an integer (or integer variable), it should be replaced with:
+    /// if n was an integer expression, it should be replaced with:
     /// 
     /// ```pesudo mbt code
     /// "<string literal>".repeat(n)
