@@ -28,7 +28,7 @@ fn report_antipattern(
   let msg =
     $| found anti-pattern at \{loc}:
     $| \{antipattern}
-    #| rewrite it to:
+    $| rewrite it to:
     $| \{suggestion}
   return msg
 }
