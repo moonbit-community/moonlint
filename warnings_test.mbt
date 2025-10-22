@@ -10,16 +10,24 @@ fn test_lint(source : String) -> Array[@moonlint.Warning] raise {
 ///|
 let match_try_question =
   #|fn main {
-  #|  match (try? f()) {
-  #|    Ok(_) => ()
-  #|    Err(_) => ()
+  #|  let foo = match (try? f()) {
+  #|    Ok(_) => "ok"
+  #|    Err(_) =>
+  #|      match (try? f()) {
+  #|        Ok(_) => "ok"
+  #|        Err(_) => "failed"
+  #|      }
   #|  }
+  #|  println(foo)
   #|}
 
 ///|
 test "match try?" {
   let warnings = test_lint(match_try_question)
-  inspect(warnings, content="[MatchTryQuestion(<lint test>-2:3-5:4)]")
+  inspect(
+    warnings,
+    content="[MatchTryQuestion(<lint test>-2:13-9:4), MatchTryQuestion(<lint test>-5:7-8:8)]",
+  )
 }
 
 ///|
