@@ -53,10 +53,11 @@ fn message_for_warning(warning : @moonlint.Warning) -> String {
       let suggestion =
         #|rewrite to:
         #|
-        #|     let value = expr catch {
+        #|     try expr catch {
         #|       err => <branch_err>
+        #|     } noraise {
+        #|       value => <branch_ok>
         #|     }
-        #|     <branch_ok>
       return report_antipattern(loc~, antipattern~, suggestion~)
     }
     StringLiteralMultiplyNumber(loc) => {
