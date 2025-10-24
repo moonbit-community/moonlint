@@ -33,10 +33,11 @@ impl @syntax.IterVisitor for LintEnv with visit_Expr(env, expr) {
     /// should be replaced with:
     /// 
     /// ```pesudo mbt code
-    /// let value = expr catch {
+    /// try expr catch {
     ///   err => <branch_err>
+    /// } noraise {
+    ///   value => <branch_ok>
     /// }
-    /// <branch_ok>
     /// ```
     env.0.push(Warning::MatchTryQuestion(loc))
   }
