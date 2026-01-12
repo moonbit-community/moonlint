@@ -57,8 +57,9 @@ fn load_module_info() -> Json raise Error {
 
 ///|
 fn get_src_location(module_info : Json) -> String {
-  if module_info.value("source") is Some(src) {
-    return src.as_string().unwrap()
+  if module_info is Object(module_info) &&
+    module_info.get("source") is Some(String(src)) {
+    return src
   } else {
     return "."
   }

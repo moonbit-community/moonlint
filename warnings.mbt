@@ -18,7 +18,6 @@ impl @syntax.IterVisitor for LintEnv with visit_Expr(env, expr) {
       ),
       cases=_,
       match_loc=_,
-      using_=_,
       loc~
     ) {
     /// curresponding anti-pattern:

@@ -1,0 +1,3 @@
+import { "moonbitlang/parser/syntax", "moonbitlang/parser/basic" }
+
+import "test" { "moonbitlang/parser" }

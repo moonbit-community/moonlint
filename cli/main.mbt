@@ -86,7 +86,12 @@ fn main {
   let usage =
     #| usage: 
     #|   moonlint.exe <file1> <file2> ...
-  @ArgParser.parse(spec, filename => filenames.push(filename), usage, argv)
+  @ArgParser.parse(spec, filename => filenames.push(filename), usage, argv) catch {
+    err => {
+      println(err)
+      panic()
+    }
+  }
   if filenames.length() == 0 {
     let base = get_src_location(load_module_info()) catch {
       err => {

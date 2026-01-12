@@ -1,5 +1,5 @@
 ///|
-typealias @basic.Location
+using @basic {type Location}
 
 ///|
-typealias @syntax.Impls
+using @syntax {type Impls}
