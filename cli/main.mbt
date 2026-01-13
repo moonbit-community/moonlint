@@ -75,6 +75,19 @@ fn message_for_warning(warning : @moonlint.Warning) -> String {
         replace_condition~,
       )
     }
+    CStyleForLoop(loc) => {
+      let antipattern =
+        #|     for i = 0; i < items.length(); i = i + 1 {
+        #|       ... items[i] ...
+        #|     }
+      let suggestion =
+        #|rewrite to:
+        #|
+        #|     for item in items {
+        #|       ... item ...
+        #|     }
+      return report_antipattern(loc~, antipattern~, suggestion~)
+    }
   }
 }
 
