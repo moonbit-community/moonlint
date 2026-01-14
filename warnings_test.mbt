@@ -57,10 +57,7 @@ let c_style_for_loop =
 ///|
 test "c style for loop" {
   let warnings = test_lint(c_style_for_loop)
-  inspect(
-    warnings,
-    content="[CStyleForLoop(<lint test>-3:3-5:4)]",
-  )
+  inspect(warnings, content="[CStyleForLoop(<lint test>-3:3-5:4)]")
 }
 
 ///|

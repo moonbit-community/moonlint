@@ -1,0 +1,26 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "myfreess/moonlint"
+
+import(
+  "moonbitlang/core/list"
+  "moonbitlang/parser/basic"
+  "moonbitlang/parser/syntax"
+)
+
+// Values
+pub fn lint(@list.List[@syntax.Impl]) -> Array[Warning]
+
+// Errors
+
+// Types and methods
+pub enum Warning {
+  MatchTryQuestion(@basic.Location)
+  StringLiteralMultiplyNumber(@basic.Location)
+  CStyleForLoop(@basic.Location)
+}
+pub impl Show for Warning
+
+// Type aliases
+
+// Traits
+
