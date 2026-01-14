@@ -20,7 +20,11 @@ priv struct ArrayGetChecker {
 ///|
 impl @syntax.IterVisitor for ArrayGetChecker with visit_Expr(self, expr) {
   match expr {
-    ArrayGet(array=Ident(id={ name: Ident(name~), .. }, ..), index=Ident(id=idx, ..), ..) => {
+    ArrayGet(
+      array=Ident(id={ name: Ident(name~), .. }, ..),
+      index=Ident(id=idx, ..),
+      ..
+    ) =>
       if idx.name is Ident(name=idx_name) && idx_name == self.var_name {
         // Found items[i] pattern
         match self.array_name {
@@ -34,13 +38,11 @@ impl @syntax.IterVisitor for ArrayGetChecker with visit_Expr(self, expr) {
         // Don't visit children - we've handled this usage
         return
       }
-    }
-    Ident(id={ name: Ident(name~), .. }, ..) => {
+    Ident(id={ name: Ident(name~), .. }, ..) =>
       if name == self.var_name {
         // Variable used outside of array indexing
         self.is_valid = false
       }
-    }
     _ => ()
   }
   self.base().visit_Expr(expr)
@@ -49,7 +51,7 @@ impl @syntax.IterVisitor for ArrayGetChecker with visit_Expr(self, expr) {
 ///|
 fn check_only_array_get_usage(
   var_name : String,
-  expr : @syntax.Expr
+  expr : @syntax.Expr,
 ) -> String? {
   let checker = ArrayGetChecker::{ var_name, array_name: None, is_valid: true }
   checker.visit_Expr(expr)
@@ -64,7 +66,7 @@ fn check_only_array_get_usage(
 /// Check if the condition is in the form `i < array.length()` or `i < array.count()`
 fn extract_array_from_condition(
   var_name : String,
-  cond : @syntax.Expr
+  cond : @syntax.Expr,
 ) -> String? {
   match cond {
     Infix(
@@ -77,13 +79,12 @@ fn extract_array_from_condition(
         ..
       ),
       ..
-    ) => {
+    ) =>
       if name == var_name && (method_name == "length" || method_name == "count") {
         Some(array_name)
       } else {
         None
       }
-    }
     _ => None
   }
 }
