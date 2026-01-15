@@ -17,6 +17,7 @@ pub enum Warning {
   MatchTryQuestion(@basic.Location)
   StringLiteralMultiplyNumber(@basic.Location)
   CStyleForLoop(@basic.Location)
+  ConsecutivePrintln(@basic.Location)
 }
 pub impl Show for Warning
 
