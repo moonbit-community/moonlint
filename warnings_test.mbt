@@ -94,3 +94,105 @@ test "c style for loop ok - different arrays" {
   let warnings = test_lint(c_style_for_loop_ok_different_array)
   inspect(warnings, content="[]")
 }
+
+///|
+let consecutive_println =
+  #|fn main {
+  #|  println("line 1")
+  #|  println("line 2")
+  #|  println("line 3")
+  #|}
+
+///|
+test "consecutive println" {
+  let warnings = test_lint(consecutive_println)
+  inspect(warnings, content="[ConsecutivePrintln(<lint test>-2:3-2:20)]")
+}
+
+///|
+let consecutive_println_four =
+  #|fn main {
+  #|  println("line 1")
+  #|  println("line 2")
+  #|  println("line 3")
+  #|  println("line 4")
+  #|}
+
+///|
+test "consecutive println - four lines" {
+  let warnings = test_lint(consecutive_println_four)
+  inspect(warnings, content="[ConsecutivePrintln(<lint test>-2:3-2:20)]")
+}
+
+///|
+let consecutive_println_ok_two =
+  #|fn main {
+  #|  println("line 1")
+  #|  println("line 2")
+  #|}
+
+///|
+test "consecutive println ok - two lines" {
+  let warnings = test_lint(consecutive_println_ok_two)
+  inspect(warnings, content="[]")
+}
+
+///|
+let consecutive_println_ok_interrupted =
+  #|fn main {
+  #|  println("line 1")
+  #|  println("line 2")
+  #|  let x = 1
+  #|  println("line 3")
+  #|}
+
+///|
+test "consecutive println ok - interrupted" {
+  let warnings = test_lint(consecutive_println_ok_interrupted)
+  inspect(warnings, content="[]")
+}
+
+///|
+let consecutive_println_with_variable =
+  #|fn main {
+  #|  let x = 1
+  #|  println("line 1")
+  #|  println("line 2")
+  #|  println(x.to_string())
+  #|}
+
+///|
+test "consecutive println ok - with variable" {
+  let warnings = test_lint(consecutive_println_with_variable)
+  inspect(warnings, content="[]")
+}
+
+///|
+let consecutive_println_as_last_expr =
+  #|fn main {
+  #|  let x = 1
+  #|  println("line 1")
+  #|  println("line 2")
+  #|  println("line 3")
+  #|}
+
+///|
+test "consecutive println - as last expr" {
+  let warnings = test_lint(consecutive_println_as_last_expr)
+  inspect(warnings, content="[ConsecutivePrintln(<lint test>-3:3-3:20)]")
+}
+
+///|
+let consecutive_println_ok_with_interp =
+  #|fn main {
+  #|  let x = 1
+  #|  println("line 1")
+  #|  println("line \{x}")
+  #|  println("line 3")
+  #|}
+
+///|
+test "consecutive println ok - with interpolation" {
+  let warnings = test_lint(consecutive_println_ok_with_interp)
+  inspect(warnings, content="[]")
+}

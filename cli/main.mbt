@@ -88,6 +88,21 @@ fn message_for_warning(warning : @moonlint.Warning) -> String {
         #|     }
       return report_antipattern(loc~, antipattern~, suggestion~)
     }
+    ConsecutivePrintln(loc) => {
+      let antipattern =
+        #|     println("line 1")
+        #|     println("line 2")
+        #|     println("line 3")
+      let suggestion =
+        #|rewrite to:
+        #|
+        #|     let msg =
+        #|       #|line 1
+        #|       #|line 2
+        #|       #|line 3
+        #|     println(msg)
+      return report_antipattern(loc~, antipattern~, suggestion~)
+    }
   }
 }
 
